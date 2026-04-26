@@ -1,0 +1,16 @@
+{
+  "name": "ppstatusline",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Custom Claude Code status line — two-row, emoji-rich, git-aware",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  }
+}
