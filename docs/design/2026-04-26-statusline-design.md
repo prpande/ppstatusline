@@ -85,8 +85,8 @@ Bar at 94% renders red; 78%/5h rate limit renders yellow.
 - **Auto-hide:** any segment whose data is null/absent/default returns `null` and does not render. Joiners between surviving segments collapse cleanly.
 - **Separator:** three spaces (`   `) between segments within a row.
 - **Inner separator:** ` │ ` (space, U+2502, space) inside a single segment that has multiple values (e.g., wall vs api time).
-- **TTY check:** ANSI escapes are emitted only when `process.stdout.isTTY === true`. Piping the script to a file produces clean text.
-- **Truecolor:** Git orange uses 24-bit ANSI (`\x1b[38;2;240;81;51m`). Windows Terminal supports it; degrades gracefully on terminals that don't.
+- **Color gating:** ANSI escapes are emitted by default, including when `process.stdout.isTTY` is `false` (Claude Code captures stdout but forwards escapes to the user's terminal). Setting `NO_COLOR` disables ANSI for plain-text output.
+- **Truecolor:** When color output is enabled, Git orange uses 24-bit ANSI (`\x1b[38;2;240;81;51m`). Windows Terminal supports it; degrades gracefully on terminals that don't.
 
 ### Symbol choices — rationale
 
@@ -232,8 +232,8 @@ Only PR data is cached. Git commands are cheap enough to run every refresh.
 - **Read flow** (`cache.ts → getPr(repo, branch)`):
   - If cache file missing → cold fetch synchronously, write cache, return.
   - If cache fresh (now − fetchedAt < TTL) → return cached.
-  - If cache stale → return cached value AND spawn detached `node dist/bg-pr-refresh.js <repoHash> <branch>` to refresh in the background.
-- **Background refresh** (`bg-pr-refresh.ts`): runs the `gh` call, writes the cache atomically (write to `.tmp`, rename), exits. Spawned with `{ detached: true, stdio: 'ignore' }` and `unref()`'d so it never blocks the parent.
+  - If cache stale → return cached value AND spawn detached `node dist/bg-pr-refresh.js <cachePath> <cwd> <branch>` to refresh in the background.
+- **Background refresh** (`bg-pr-refresh.ts`): runs the `gh` call from the provided `cwd`, writes to the provided cache path atomically (write to `.tmp`, rename), exits. Spawned with `{ detached: true, stdio: 'ignore' }` and `unref()`'d so it never blocks the parent.
 - **Atomic write:** prevents the main script from reading half-written JSON if it fires during a background refresh.
 
 After the first cold fetch, every status line refresh returns in <300ms regardless of network state.
@@ -247,7 +247,7 @@ After the first cold fetch, every status line refresh returns in <300ms regardle
 | `gh` not installed | PR segment hides silently |
 | `gh` errors (network, auth) | PR segment hides; cache untouched |
 | Bad config JSON | Warn to stderr, fall back to defaults |
-| Anything else throws | Top-level catch writes a minimal `🤖 ${model}` line to stdout |
+| Anything else throws | Top-level catch writes a minimal `🤖` line to stdout |
 
 ### Performance budget
 

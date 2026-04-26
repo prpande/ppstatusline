@@ -20,7 +20,7 @@ async function main(): Promise<void> {
     payload = JSON.parse(raw) as ClaudePayload;
   } catch {
     // Empty/malformed stdin → emit a tiny degraded line so the bar isn't blank.
-    process.stdout.write('\n');
+    process.stdout.write('🤖\n');
     return;
   }
 
