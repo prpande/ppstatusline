@@ -1,0 +1,27 @@
+{
+  "row1": [
+    "model",
+    "dir",
+    "repo",
+    "branch",
+    "worktree",
+    "pr",
+    "effort",
+    "thinking",
+    "sessionName",
+    "agent",
+    "outputStyle",
+    "vimMode"
+  ],
+  "row2": [
+    "context",
+    "cost",
+    "time",
+    "edits",
+    "rateLimit"
+  ],
+  "showSevenDayLimit": false,
+  "prCacheTtlSeconds": 60,
+  "contextBarWidth": 10,
+  "iconOverrides": {}
+}
