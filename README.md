@@ -1,10 +1,10 @@
 # ppstatusline
 
-Custom [Claude Code](https://claude.com/claude-code) status line. Two rows: identity on top, live metrics on bottom.
+Custom [Claude Code](https://claude.com/claude-code) status line. Two rows: live metrics on top, identity on bottom. Each row truncates to fit the terminal width so neither row ever wraps and gets eaten by the host UI.
 
 ```
-🤖 Opus   📁 C:\src\my-project    me/my-project   🌿 main   🌳 fix-auth   🔗 #1234   ⚡ high
-📊 ████------ 40%   💰 $0.1234   ⏱ 2.3m │ api 42s   ✏️ +156 −23   🚦 23%/5h
+🤖 Opus   📊 ████------ 40%   💰 $0.1234   ⏱ 2.3m │ api 42s   ✏️ +156 −23   🚦 23%/5h
+📁 C:\src\my-project    me/my-project   🌿 main   🌳 fix-auth   🔗 #1234   ⚡ high
 ```
 
 Personal-use project. See `docs/design/2026-04-26-statusline-design.md` for the full spec.
@@ -45,7 +45,8 @@ Common tweaks:
 
 ```json
 {
-  "row1": ["model", "dir", "repo", "branch", "worktree", "pr", "effort"],
+  "row1": ["model", "context", "cost", "time"],
+  "row2": ["dir", "repo", "branch", "worktree", "pr", "effort"],
   "showSevenDayLimit": true,
   "contextBarWidth": 20,
   "iconOverrides": { "branch": "🌱" }

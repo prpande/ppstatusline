@@ -4,8 +4,8 @@ import { join } from 'node:path';
 import type { Config, Icons } from './types.js';
 
 const DEFAULT_CONFIG: Config = {
-  row1: [
-    'model',
+  row1: ['model', 'context', 'cost', 'time', 'edits', 'rateLimit'],
+  row2: [
     'dir',
     'repo',
     'branch',
@@ -18,7 +18,6 @@ const DEFAULT_CONFIG: Config = {
     'outputStyle',
     'vimMode',
   ],
-  row2: ['context', 'cost', 'time', 'edits', 'rateLimit'],
   showSevenDayLimit: false,
   prCacheTtlSeconds: 60,
   contextBarWidth: 10,
