@@ -1,6 +1,6 @@
 {
-  "row1": [
-    "model",
+  "row1": ["model", "context", "rateLimit", "edits", "cost", "time"],
+  "row2": [
     "dir",
     "repo",
     "branch",
@@ -13,14 +13,7 @@
     "outputStyle",
     "vimMode"
   ],
-  "row2": [
-    "context",
-    "cost",
-    "time",
-    "edits",
-    "rateLimit"
-  ],
-  "showSevenDayLimit": false,
+  "showSevenDayLimit": true,
   "prCacheTtlSeconds": 60,
   "contextBarWidth": 10,
   "iconOverrides": {}

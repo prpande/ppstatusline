@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import type { Config, Icons } from './types.js';
 
 const DEFAULT_CONFIG: Config = {
-  row1: ['model', 'context', 'cost', 'time', 'edits', 'rateLimit'],
+  row1: ['model', 'context', 'rateLimit', 'edits', 'cost', 'time'],
   row2: [
     'dir',
     'repo',
@@ -18,7 +18,7 @@ const DEFAULT_CONFIG: Config = {
     'outputStyle',
     'vimMode',
   ],
-  showSevenDayLimit: false,
+  showSevenDayLimit: true,
   prCacheTtlSeconds: 60,
   contextBarWidth: 10,
   iconOverrides: {},
