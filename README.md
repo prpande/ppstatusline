@@ -3,7 +3,7 @@
 Custom [Claude Code](https://claude.com/claude-code) status line. Two rows: live metrics on top, identity on bottom. Each row truncates to fit the terminal width so neither row ever wraps and gets eaten by the host UI.
 
 ```
-🤖 Opus   📊 ████------ 40%   💰 $0.1234   ⏱ 2.3m │ api 42s   ✏️ +156 −23   🚦 23%/5h
+🤖 Opus   📊 ████------ 40%   🚦 23%/5h 78%/7d   ✏️ +156 −23   💰 $0.1234   ⏱ 2.3m │ api 42s
 📁 C:\src\my-project    me/my-project   🌿 main   🌳 fix-auth   🔗 #1234   ⚡ high
 ```
 
@@ -47,7 +47,7 @@ Common tweaks:
 {
   "row1": ["model", "context", "cost", "time"],
   "row2": ["dir", "repo", "branch", "worktree", "pr", "effort"],
-  "showSevenDayLimit": true,
+  "showSevenDayLimit": false,
   "contextBarWidth": 20,
   "iconOverrides": { "branch": "🌱" }
 }
