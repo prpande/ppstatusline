@@ -36,7 +36,7 @@ When Claude Code spawns the status line script, it pipes the JSON payload to std
 
 Add a new probe step that opens the parent console directly, regardless of how stdio is wired:
 
-- **Windows**: `openSync('CONOUT$', 'r+')`
+- **Windows**: `openSync('\\\\.\\CONOUT$', 'r+')` — the bare name `CONOUT$` gets resolved against CWD and fails with ENOENT, so the Win32 device prefix is required.
 - **POSIX**: `openSync('/dev/tty', 'r+')`
 
 Wrap the resulting fd in `new tty.WriteStream(fd)` and read `.columns`. This works *even when stdio is redirected* — it talks to the actual controlling terminal of the process. Both APIs are Node stdlib.

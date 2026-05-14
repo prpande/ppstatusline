@@ -3,6 +3,7 @@ import { makeColors } from './colors.js';
 import { collectGitState } from './git.js';
 import { getOrRefreshPr } from './cache.js';
 import { renderRow } from './render.js';
+import { detectColumns } from './terminal.js';
 import type { ClaudePayload, RenderCtx } from './types.js';
 
 async function readStdin(): Promise<string> {
@@ -11,19 +12,6 @@ async function readStdin(): Promise<string> {
     chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
   }
   return Buffer.concat(chunks).toString('utf8');
-}
-
-// Terminal columns aren't passed in the statusLine payload (only the
-// subagent variant gets `columns`), so probe what we can. stdout is captured
-// by Claude Code, but stderr/stdin usually retain the parent TTY's width.
-function detectColumns(): number {
-  const streams = [process.stderr, process.stdout, process.stdin] as Array<{ columns?: number }>;
-  for (const s of streams) {
-    if (typeof s.columns === 'number' && s.columns > 0) return s.columns;
-  }
-  const env = Number.parseInt(process.env.COLUMNS ?? '', 10);
-  if (Number.isFinite(env) && env > 0) return env;
-  return 120;
 }
 
 async function main(): Promise<void> {
