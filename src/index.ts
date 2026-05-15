@@ -13,19 +13,6 @@ async function readStdin(): Promise<string> {
   return Buffer.concat(chunks).toString('utf8');
 }
 
-// Terminal columns aren't passed in the statusLine payload (only the
-// subagent variant gets `columns`), so probe what we can. stdout is captured
-// by Claude Code, but stderr/stdin usually retain the parent TTY's width.
-function detectColumns(): number {
-  const streams = [process.stderr, process.stdout, process.stdin] as Array<{ columns?: number }>;
-  for (const s of streams) {
-    if (typeof s.columns === 'number' && s.columns > 0) return s.columns;
-  }
-  const env = Number.parseInt(process.env.COLUMNS ?? '', 10);
-  if (Number.isFinite(env) && env > 0) return env;
-  return 120;
-}
-
 async function main(): Promise<void> {
   const raw = await readStdin();
   let payload: ClaudePayload;
@@ -60,12 +47,12 @@ async function main(): Promise<void> {
 
   const ctx: RenderCtx = { payload, git, pr, config, c, icons };
 
-  // Truncate to terminal width: Claude Code reserves a fixed number of
-  // visual rows for the status line, so a row that wraps eats the next
-  // row's slot. Reserve 1 cell of slack for any padding the host adds.
-  const cols = Math.max(1, detectColumns() - 1);
-  const row1 = renderRow(config.row1, ctx, cols);
-  const row2 = renderRow(config.row2, ctx, cols);
+  // No truncation: Claude Code spawns us in a fixed 120-col ConPTY but
+  // renders our output into its own (wider) display area on the outer
+  // terminal, clipping cleanly at its right edge. Truncating here just
+  // creates premature ellipses.
+  const row1 = renderRow(config.row1, ctx);
+  const row2 = renderRow(config.row2, ctx);
 
   process.stdout.write(`${row1}\n${row2}\n`);
 }
