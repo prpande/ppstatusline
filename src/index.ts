@@ -3,7 +3,6 @@ import { makeColors } from './colors.js';
 import { collectGitState } from './git.js';
 import { getOrRefreshPr } from './cache.js';
 import { renderRow } from './render.js';
-import { detectColumns } from './terminal.js';
 import type { ClaudePayload, RenderCtx } from './types.js';
 
 async function readStdin(): Promise<string> {
@@ -48,12 +47,12 @@ async function main(): Promise<void> {
 
   const ctx: RenderCtx = { payload, git, pr, config, c, icons };
 
-  // Truncate to terminal width: Claude Code reserves a fixed number of
-  // visual rows for the status line, so a row that wraps eats the next
-  // row's slot. Reserve 1 cell of slack for any padding the host adds.
-  const cols = Math.max(1, detectColumns() - 1);
-  const row1 = renderRow(config.row1, ctx, cols);
-  const row2 = renderRow(config.row2, ctx, cols);
+  // No truncation: Claude Code spawns us in a fixed 120-col ConPTY but
+  // renders our output into its own (wider) display area on the outer
+  // terminal, clipping cleanly at its right edge. Truncating here just
+  // creates premature ellipses.
+  const row1 = renderRow(config.row1, ctx);
+  const row2 = renderRow(config.row2, ctx);
 
   process.stdout.write(`${row1}\n${row2}\n`);
 }
