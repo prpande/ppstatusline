@@ -53,6 +53,16 @@ Common tweaks:
 }
 ```
 
+## Rate-limit file
+
+On every render that carries `rate_limits`, the script writes `~/.claude/statusline-cache/rate-limits.json` (temp file, then rename):
+
+```json
+{"seven_day": {"used_percentage": 41.0, "resets_at": 1794091800}, "five_hour": {"used_percentage": 12.0, "resets_at": 1793990000}, "at": 1793981234}
+```
+
+`resets_at` and `at` are Unix seconds. Either window is `null` when the payload lacks it. Other tools (the orchestrator's budget guard) read this file; a missing or old `at` means no session has rendered recently.
+
 ## Iterating
 
 ```bash
