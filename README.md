@@ -67,6 +67,7 @@ On every render that carries `rate_limits`, the script writes `~/.claude/statusl
 
 ```bash
 npm run dev   # tsc --watch in the background
+npm test      # node:test, runs test/*.test.ts directly (Node 22.18+)
 ```
 
 Edit a segment in `src/segments/`. The status line updates next time Claude Code re-runs it (next assistant message).
