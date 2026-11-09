@@ -3,6 +3,7 @@ import { makeColors } from './colors.js';
 import { collectGitState } from './git.js';
 import { getOrRefreshPr } from './cache.js';
 import { renderRow } from './render.js';
+import { writeRateLimits } from './rateLimitsFile.js';
 import type { ClaudePayload, RenderCtx } from './types.js';
 
 async function readStdin(): Promise<string> {
@@ -23,6 +24,8 @@ async function main(): Promise<void> {
     process.stdout.write('🤖\n');
     return;
   }
+
+  writeRateLimits(payload);
 
   const config = loadConfig();
   const icons = resolveIcons(config);
